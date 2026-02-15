@@ -1,6 +1,7 @@
 {
-  "name": "voiceclip-temp",
-  "version": "0.1.0",
+  "name": "voiceclip",
+  "version": "1.0.0",
+  "description": "Create viral-worthy audio moments with AI - AI-powered platform for generating TikTok/Instagram-ready audio clips",
   "private": true,
   "scripts": {
     "dev": "next dev",
