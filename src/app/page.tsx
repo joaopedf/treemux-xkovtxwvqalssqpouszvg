@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Mic, Sparkles, Download, Play, Pause, Wand2 } from "lucide-react";
+import { AudioVisualizer } from "@/components/AudioVisualizer";
 
 const TRENDING_PROMPTS = [
   "Plot twist: I'm actually the villain",
@@ -275,9 +276,7 @@ export default function VoiceClip() {
                   </div>
                 </div>
                 <audio ref={audioRef} src={audioUrl} />
-                <div className="h-2 bg-purple-200 rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-purple-600 to-pink-600 animate-pulse" />
-                </div>
+                <AudioVisualizer audioUrl={audioUrl} isPlaying={isPlaying} />
               </div>
             )}
           </Card>
