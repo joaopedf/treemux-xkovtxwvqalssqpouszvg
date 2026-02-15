@@ -38,8 +38,32 @@ export default function VoiceClip() {
   const [speed, setSpeed] = useState([1.0]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isEnhancing, setIsEnhancing] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const enhanceScript = async () => {
+    if (!prompt.trim()) return;
+
+    setIsEnhancing(true);
+    try {
+      const response = await fetch("/api/enhance-script", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: prompt }),
+      });
+
+      if (!response.ok) throw new Error("Failed to enhance script");
+
+      const data = await response.json();
+      setPrompt(data.enhancedText);
+    } catch (error) {
+      console.error("Error enhancing script:", error);
+      alert("Failed to enhance script. Please try again.");
+    } finally {
+      setIsEnhancing(false);
+    }
+  };
 
   const generateVoice = async () => {
     if (!prompt.trim()) return;
@@ -142,12 +166,26 @@ export default function VoiceClip() {
               <label className="text-sm font-semibold text-gray-700 mb-2 block">
                 Your Script
               </label>
-              <Input
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-                placeholder="Type your viral audio script here..."
-                className="text-base h-12 border-2 border-purple-200 focus:border-purple-400"
-              />
+              <div className="flex gap-2">
+                <Input
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  placeholder="Type your viral audio script here..."
+                  className="text-base h-12 border-2 border-purple-200 focus:border-purple-400"
+                />
+                <Button
+                  onClick={enhanceScript}
+                  disabled={isEnhancing || !prompt.trim()}
+                  variant="outline"
+                  className="h-12 border-2 border-purple-200 hover:bg-purple-50"
+                >
+                  {isEnhancing ? (
+                    <div className="w-4 h-4 border-2 border-purple-600 border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <Sparkles className="w-4 h-4 text-purple-600" />
+                  )}
+                </Button>
+              </div>
             </div>
 
             {/* Voice Selection */}
